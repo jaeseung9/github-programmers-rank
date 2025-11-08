@@ -9,9 +9,10 @@ const PROGRAMMERS_SIGN_IN = "https://programmers.co.kr/api/v1/account/sign-in";
 const PROGRAMMERS_USER_RECORD = "https://programmers.co.kr/api/v1/users/record";
 
 async function main() {
-  // 1) 환경변수
+  // 1) 환경 변수
   const id = process.env.PROGRAMMERS_TOKEN_ID || "";
   const pw = process.env.PROGRAMMERS_TOKEN_PW || "";
+
   let my_data: any = null;
 
   // 2) 로그인 & 데이터 조회
@@ -33,124 +34,84 @@ async function main() {
     return;
   }
 
-  if (!my_data) return;
+  // 3) SVG 생성
+  if (my_data) {
+    const maxProblems = 300;                       // 진행바 기준값
+    const progress = Math.min(my_data.codingTest.solved / maxProblems, 1);
+    const progressWidth = Math.floor(480 * progress);
 
-  // 3) 데이터 가드 & 포맷
-  const level = my_data?.skillCheck?.level ?? 0;
-  const score = Number(my_data?.ranking?.score ?? 0);
-  const rank = Number(my_data?.ranking?.rank ?? 0);
-  const solved = Number(my_data?.codingTest?.solved ?? 0);
-
-  const maxProblems = 300; // 진행바 기준값(원하면 수정)
-  const progress = Math.max(0, Math.min(solved / maxProblems, 1));
-  const barWidth = 460 * progress;
-  const percent = Math.round(progress * 100);
-
-  // 4) 트렌디 다크 카드 SVG
-  const str = `<?xml version="1.0" encoding="UTF-8"?>
-<svg width="600" height="210" viewBox="0 0 600 210" fill="none" xmlns="http://www.w3.org/2000/svg">
-
-  <!-- 배경 그라디언트 & 글로우 -->
+    const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="560" height="200" viewBox="0 0 560 200" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg-grad" x1="0" y1="0" x2="600" y2="210" gradientUnits="userSpaceOnUse">
-      <stop offset="0%"  stop-color="#16181d"/>
-      <stop offset="100%" stop-color="#0f1217"/>
+    <!-- 배경 그라데이션 (더 고급진 블랙) -->
+    <linearGradient id="grad-bg" x1="0" y1="0" x2="560" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"  stop-color="#0f1218"/>
+      <stop offset="50%" stop-color="#141823"/>
+      <stop offset="100%" stop-color="#1a2030"/>
     </linearGradient>
 
-    <linearGradient id="card-grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%"  stop-color="rgba(255,255,255,0.08)"/>
-      <stop offset="100%" stop-color="rgba(255,255,255,0.03)"/>
-    </linearGradient>
-
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%"  stop-color="#69b1ff"/>
-      <stop offset="100%" stop-color="#3a86ff"/>
-    </linearGradient>
-
-    <filter id="soft-shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.35"/>
+    <!-- 은은한 외곽 글로우 -->
+    <filter id="outer-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#1f2a3f" flood-opacity="0.6"/>
     </filter>
 
-    <filter id="inner-glow">
-      <feGaussianBlur stdDeviation="3" result="blur" />
-      <feBlend in="SourceGraphic" in2="blur" mode="screen"/>
+    <!-- 카드 그림자 -->
+    <filter id="card-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.45"/>
     </filter>
   </defs>
 
-  <!-- 전체 카드 -->
-  <rect x="10" y="10" width="580" height="190" rx="16" fill="url(#bg-grad)" stroke="rgba(255,255,255,0.08)" filter="url(#soft-shadow)"/>
+  <!-- 배경판 -->
+  <rect x="0" y="0" width="560" height="200" rx="16" fill="url(#grad-bg)" filter="url(#outer-glow)" stroke="rgba(255,255,255,0.06)"/>
 
-  <!-- 안쪽 유리 카드 2x2 -->
-  <g>
-    <rect x="28"  y="28"  width="260" height="70" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)"/>
-    <rect x="312" y="28"  width="260" height="70" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)"/>
-    <rect x="28"  y="108" width="260" height="70" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)"/>
-    <rect x="312" y="108" width="260" height="70" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)"/>
-  </g>
-
+  <!-- 공통 스타일 -->
   <style>
-    .title {
-      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
-      font-weight: 600;
-      font-size: 13px;
-      fill: #cfd6e4;
-      letter-spacing: 0.2px;
-    }
-    .value {
-      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
-      font-weight: 800;
-      font-size: 30px;
-      fill: url(#accent);
-      filter: url(#inner-glow);
-    }
-    .unit {
-      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      fill: url(#accent);
-    }
-    .muted {
-      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
-      font-weight: 600;
-      font-size: 12px;
-      fill: #9aa3b2;
-    }
+    .title { font-family: "Segoe UI", system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+             font-size: 13px; font-weight: 600; fill: #C9D3E1; letter-spacing: .2px; }
+    .value { font-family: "Segoe UI", system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+             font-size: 28px; font-weight: 800; fill: #64A8FF; }
+    .unit  { font-family: "Segoe UI", system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+             font-size: 14px; font-weight: 700; fill: #6AA8FF; }
+    .muted { font-family: "Segoe UI", system-ui, -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+             font-size: 12px; fill: #9BABBF; }
+    .card  { fill: rgba(255,255,255,0.04); stroke: rgba(255,255,255,0.06); stroke-width: 1;
+             rx: 12; filter: url(#card-shadow); }
   </style>
 
-  <!-- 좌상: 레벨 -->
-  <text x="46" y="50" class="title">정복 중인 레벨</text>
-  <text x="46" y="85" class="value">${level}</text>
-  <text x="86" y="85" class="unit">레벨</text>
+  <!-- 좌/우 카드 영역 레이아웃 -->
+  <!-- 카드: 정복 레벨 -->
+  <rect class="card" x="24" y="24" width="240" height="70" />
+  <text class="title" x="44" y="48">정복 중인 레벨</text>
+  <text class="value" x="44" y="80">${my_data.skillCheck.level}<tspan class="unit" dx="8">레벨</tspan></text>
 
-  <!-- 우상: 점수 -->
-  <text x="330" y="50" class="title">현재 점수</text>
-  <text x="330" y="85" class="value">${score.toLocaleString("ko-KR")}</text>
+  <!-- 카드: 현재 점수 -->
+  <rect class="card" x="296" y="24" width="240" height="70" />
+  <text class="title" x="316" y="48">현재 점수</text>
+  <text class="value" x="316" y="80">${my_data.ranking.score.toLocaleString('ko-KR')}</text>
 
-  <!-- 좌하: 해결 문제 + 진행바 -->
-  <text x="46" y="130" class="title">해결한 코딩 테스트</text>
-  <text x="46" y="165" class="value">${solved}</text>
-  <text x="108" y="165" class="unit">문제</text>
+  <!-- 카드: 해결 문제 -->
+  <rect class="card" x="24" y="104" width="240" height="70" />
+  <text class="title" x="44" y="128">해결한 코딩 테스트</text>
+  <text class="value" x="44" y="160">${my_data.codingTest.solved}<tspan class="unit" dx="8">문제</tspan></text>
 
-  <!-- 진행바(좌하 카드 하단에 걸치게) -->
-  <g>
-    <rect x="46" y="178" width="460" height="6" rx="3" fill="rgba(255,255,255,0.12)"/>
-    <rect x="46" y="178" width="${barWidth}" height="6" rx="3" fill="url(#accent)"/>
-    <text x="520" y="183" class="muted" text-anchor="end">${solved} / ${maxProblems} · ${percent}%</text>
+  <!-- 카드: 나의 랭킹 (단위 분리해서 겹치지 않게) -->
+  <rect class="card" x="296" y="104" width="240" height="70" />
+  <text class="title" x="316" y="128">나의 랭킹</text>
+  <text class="value" x="316" y="160">${my_data.ranking.rank.toLocaleString('ko-KR')}<tspan class="unit" dx="10">위</tspan></text>
+
+  <!-- 하단 진행바 -->
+  <g transform="translate(24,184)">
+    <rect x="0" y="-5" width="512" height="6" rx="3" fill="rgba(255,255,255,0.18)"/>
+    <rect x="0" y="-5" width="${progressWidth}" height="6" rx="3" fill="#64A8FF"/>
+    <text class="muted" x="512" y="-8" text-anchor="end">${my_data.codingTest.solved} / ${maxProblems}</text>
   </g>
-
-  <!-- 우하: 랭킹 -->
-  <text x="330" y="130" class="title">나의 랭킹</text>
-  <text x="330" y="165" class="value">${rank.toLocaleString("ko-KR")}</text>
-  <text x="420" y="165" class="unit">위</text>
-
 </svg>`;
 
-  // 5) 파일 저장 & 커밋
-  const out = __dirname + "/result.svg";
-  fs.writeFileSync(out, str);
-  await commitFile(out);
-
-  console.log("success");
+    // 4) 파일 저장 & 커밋
+    fs.writeFileSync(__dirname + "/result.svg", svg, "utf-8");
+    await commitFile(__dirname + "/result.svg");
+    console.log("success");
+  }
 }
 
 main();
