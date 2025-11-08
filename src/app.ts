@@ -29,62 +29,47 @@ async function main() {
         const progress = Math.min(my_data.codingTest.solved / maxProblems, 1);
         const progressWidth = 420 * progress;
 
-        const str = `<?xml version="1.0" encoding="UTF-8"?>
-<svg width="560" height="180" viewBox="0 0 560 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      const maxProblems = 300;
+const progress = Math.min(my_data.codingTest.solved / maxProblems, 1);
+const bar = 420 * progress;
+
+const str = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="460" height="160" viewBox="0 0 460 160" fill="none" xmlns="http://www.w3.org/2000/svg">
 
 <defs>
-<linearGradient id="grad-bg" x1="0" y1="0" x2="560" y2="0">
-  <stop offset="0%" stop-color="#1a1b1f"/>
-  <stop offset="100%" stop-color="#44454d"/>
+<linearGradient id="bg" x1="0" y1="0" x2="460" y2="160">
+  <stop offset="0%" stop-color="#1e1f23"/>
+  <stop offset="100%" stop-color="#2a2b31"/>
 </linearGradient>
 </defs>
 
-<rect width="560" height="180" rx="14" fill="url(#grad-bg)" stroke="rgba(255,255,255,0.08)" />
+<rect width="460" height="160" rx="16" fill="url(#bg)" stroke="rgba(255,255,255,0.06)" />
 
 <style>
-.title {
-  font-family: "Segoe UI", sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  fill: #e5e5e5;
-}
-.value {
-  font-family: "Segoe UI", sans-serif;
-  font-size: 26px;
-  font-weight: 700;
-  fill: #4da3ff;
-}
-.sub {
-  font-family: "Segoe UI", sans-serif;
-  font-size: 14px;
-  fill: #4da3ff;
-  font-weight: 600;
-}
-.label {
-  font-family: "Segoe UI", sans-serif;
-  font-size: 13px;
-  fill: #cfcfcf;
-}
+.t1 { font-family: 'Segoe UI', sans-serif; font-size: 32px; font-weight: 700; fill:#4da3ff }
+.t2 { font-family: 'Segoe UI', sans-serif; font-size: 14px; fill:#bfc4d4 }
+.t3 { font-family: 'Segoe UI', sans-serif; font-size: 16px; font-weight:600; fill:#4da3ff }
 </style>
 
-<text x="40" y="55" class="title">정복 중인 레벨</text>
-<text x="40" y="88" class="value">${my_data.skillCheck.level}</text>
-<text x="85" y="88" class="sub">레벨</text>
+<!-- 유저명 -->
+<text x="26" y="42" class="t1">${my_data.skillCheck.level}레벨</text>
+<text x="26" y="64" class="t2">Level</text>
 
-<text x="300" y="55" class="title">현재 점수</text>
-<text x="300" y="88" class="value">${my_data.ranking.score.toLocaleString('ko-KR')}</text>
+<!-- Score -->
+<text x="160" y="42" class="t1">${my_data.ranking.score.toLocaleString('ko-KR')}</text>
+<text x="160" y="64" class="t2">Score</text>
 
-<text x="40" y="130" class="title">해결한 코딩 테스트</text>
-<text x="40" y="160" class="value">${my_data.codingTest.solved}</text>
-<text x="110" y="160" class="sub">문제</text>
+<!-- Rank -->
+<text x="300" y="42" class="t1">${my_data.ranking.rank.toLocaleString('ko-KR')}위</text>
+<text x="300" y="64" class="t2">Rank</text>
 
-<text x="300" y="130" class="title">나의 랭킹</text>
-<text x="300" y="160" class="value">${my_data.ranking.rank.toLocaleString('ko-KR')}</text>
-<text x="380" y="160" class="sub">위</text>
+<!-- Solved -->
+<text x="26" y="115" class="t3">${my_data.codingTest.solved} solved</text>
 
-<rect x="40" y="170" width="420" height="6" rx="3" fill="rgba(255,255,255,0.25)"/>
-<rect x="40" y="170" width="${progressWidth}" height="6" rx="3" fill="#4da3ff"/>
-<text x="470" y="175" class="label" text-anchor="end">${my_data.codingTest.solved} / ${maxProblems}</text>
+<!-- Progress bar -->
+<rect x="26" y="122" width="420" height="6" rx="3" fill="rgba(255,255,255,0.2)"/>
+<rect x="26" y="122" width="${bar}" height="6" rx="3" fill="#4da3ff"/>
+<text x="446" y="130" class="t2" text-anchor="end">${my_data.codingTest.solved} / ${maxProblems}</text>
 
 </svg>`;
 
