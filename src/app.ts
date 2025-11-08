@@ -1,8 +1,35 @@
-const maxProblems = 300; // 진행바 기준값 (원하면 수정 가능)
-const progress = Math.min(my_data.codingTest.solved / maxProblems, 1);
-const progressWidth = 420 * progress;
+import { useAxios } from "./utils/axios"
+import fs from 'fs'
+import dotenv from 'dotenv'
+import { commitFile } from "./utils/exec"
+dotenv.config()
 
-const str = `<?xml version="1.0" encoding="UTF-8"?>
+const PROGRAMMERS_SIGN_IN = 'https://programmers.co.kr/api/v1/account/sign-in'
+const PROGRAMMERS_USER_RECORD = 'https://programmers.co.kr/api/v1/users/record'
+
+async function main() {
+    let id = process.env.PROGRAMMERS_TOKEN_ID || ''
+    let pw = process.env.PROGRAMMERS_TOKEN_PW || ''
+    let my_data = null;
+
+    try {
+        let res = await useAxios(PROGRAMMERS_SIGN_IN, "POST", {"user": {"email": id, "password": pw}})
+        if (res.data !== null) {
+            res = await useAxios(PROGRAMMERS_USER_RECORD, "GET", undefined, res.headers["set-cookie"]);
+            my_data = res.data
+        }
+    } catch (e) {
+        console.error('axios error: ' + e)
+        return;
+    }
+
+    if (my_data !== null) {
+
+        const maxProblems = 300; // 진행바 기준값
+        const progress = Math.min(my_data.codingTest.solved / maxProblems, 1);
+        const progressWidth = 420 * progress;
+
+        const str = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="560" height="180" viewBox="0 0 560 180" fill="none" xmlns="http://www.w3.org/2000/svg">
 
 <defs>
@@ -40,28 +67,32 @@ const str = `<?xml version="1.0" encoding="UTF-8"?>
 }
 </style>
 
-<!-- Level -->
 <text x="40" y="55" class="title">정복 중인 레벨</text>
 <text x="40" y="88" class="value">${my_data.skillCheck.level}</text>
 <text x="85" y="88" class="sub">레벨</text>
 
-<!-- Score -->
 <text x="300" y="55" class="title">현재 점수</text>
 <text x="300" y="88" class="value">${my_data.ranking.score.toLocaleString('ko-KR')}</text>
 
-<!-- Solved -->
 <text x="40" y="130" class="title">해결한 코딩 테스트</text>
 <text x="40" y="160" class="value">${my_data.codingTest.solved}</text>
 <text x="110" y="160" class="sub">문제</text>
 
-<!-- Rank -->
 <text x="300" y="130" class="title">나의 랭킹</text>
 <text x="300" y="160" class="value">${my_data.ranking.rank.toLocaleString('ko-KR')}</text>
 <text x="380" y="160" class="sub">위</text>
 
-<!-- Progress Bar -->
 <rect x="40" y="170" width="420" height="6" rx="3" fill="rgba(255,255,255,0.25)"/>
 <rect x="40" y="170" width="${progressWidth}" height="6" rx="3" fill="#4da3ff"/>
 <text x="470" y="175" class="label" text-anchor="end">${my_data.codingTest.solved} / ${maxProblems}</text>
 
 </svg>`;
+
+        fs.writeFileSync(__dirname + '/result.svg', str)
+        await commitFile(__dirname + '/result.svg')
+
+        console.log('success ✅')
+    }
+}
+
+main();
