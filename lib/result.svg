@@ -1,34 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="460" height="160" viewBox="0 0 460 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="600" height="210" viewBox="0 0 600 210" fill="none" xmlns="http://www.w3.org/2000/svg">
 
-<defs>
-<linearGradient id="bg" x1="0" y1="0" x2="460" y2="160">
-  <stop offset="0%" stop-color="#1e1f23"/>
-  <stop offset="100%" stop-color="#2a2b31"/>
-</linearGradient>
-</defs>
+  <!-- 배경 그라디언트 & 글로우 -->
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="600" y2="210" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"  stop-color="#16181d"/>
+      <stop offset="100%" stop-color="#0f1217"/>
+    </linearGradient>
 
-<rect width="460" height="160" rx="16" fill="url(#bg)" stroke="rgba(255,255,255,0.06)" />
+    <linearGradient id="card-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="rgba(255,255,255,0.08)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.03)"/>
+    </linearGradient>
 
-<style>
-.t1 { font-family: 'Segoe UI', sans-serif; font-size: 32px; font-weight: 700; fill:#4da3ff }
-.t2 { font-family: 'Segoe UI', sans-serif; font-size: 14px; fill:#bfc4d4 }
-.t3 { font-family: 'Segoe UI', sans-serif; font-size: 16px; font-weight:600; fill:#4da3ff }
-</style>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"  stop-color="#69b1ff"/>
+      <stop offset="100%" stop-color="#3a86ff"/>
+    </linearGradient>
 
-<text x="26" y="42" class="t1">1레벨</text>
-<text x="26" y="64" class="t2">Level</text>
+    <filter id="soft-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
 
-<text x="160" y="42" class="t1">1,318</text>
-<text x="160" y="64" class="t2">Score</text>
+    <filter id="inner-glow">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feBlend in="SourceGraphic" in2="blur" mode="screen"/>
+    </filter>
+  </defs>
 
-<text x="300" y="42" class="t1">54,013위</text>
-<text x="300" y="64" class="t2">Rank</text>
+  <!-- 전체 카드 -->
+  <rect x="10" y="10" width="580" height="190" rx="16" fill="url(#bg-grad)" stroke="rgba(255,255,255,0.08)" filter="url(#soft-shadow)"/>
 
-<text x="26" y="115" class="t3">103 solved</text>
+  <!-- 안쪽 유리 카드 2x2 -->
+  <g>
+    <rect x="28"  y="28"  width="260" height="70" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)"/>
+    <rect x="312" y="28"  width="260" height="70" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)"/>
+    <rect x="28"  y="108" width="260" height="70" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)"/>
+    <rect x="312" y="108" width="260" height="70" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)"/>
+  </g>
 
-<rect x="26" y="122" width="420" height="6" rx="3" fill="rgba(255,255,255,0.2)"/>
-<rect x="26" y="122" width="144.2" height="6" rx="3" fill="#4da3ff"/>
-<text x="446" y="130" class="t2" text-anchor="end">103 / 300</text>
+  <style>
+    .title {
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      fill: #cfd6e4;
+      letter-spacing: 0.2px;
+    }
+    .value {
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+      font-weight: 800;
+      font-size: 30px;
+      fill: url(#accent);
+      filter: url(#inner-glow);
+    }
+    .unit {
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      fill: url(#accent);
+    }
+    .muted {
+      font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      fill: #9aa3b2;
+    }
+  </style>
+
+  <!-- 좌상: 레벨 -->
+  <text x="46" y="50" class="title">정복 중인 레벨</text>
+  <text x="46" y="85" class="value">1</text>
+  <text x="86" y="85" class="unit">레벨</text>
+
+  <!-- 우상: 점수 -->
+  <text x="330" y="50" class="title">현재 점수</text>
+  <text x="330" y="85" class="value">1,318</text>
+
+  <!-- 좌하: 해결 문제 + 진행바 -->
+  <text x="46" y="130" class="title">해결한 코딩 테스트</text>
+  <text x="46" y="165" class="value">103</text>
+  <text x="108" y="165" class="unit">문제</text>
+
+  <!-- 진행바(좌하 카드 하단에 걸치게) -->
+  <g>
+    <rect x="46" y="178" width="460" height="6" rx="3" fill="rgba(255,255,255,0.12)"/>
+    <rect x="46" y="178" width="157.93333333333334" height="6" rx="3" fill="url(#accent)"/>
+    <text x="520" y="183" class="muted" text-anchor="end">103 / 300 · 34%</text>
+  </g>
+
+  <!-- 우하: 랭킹 -->
+  <text x="330" y="130" class="title">나의 랭킹</text>
+  <text x="330" y="165" class="value">54,013</text>
+  <text x="420" y="165" class="unit">위</text>
 
 </svg>
