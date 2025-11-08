@@ -16,17 +16,15 @@ async function main() {
         let res = await useAxios(PROGRAMMERS_SIGN_IN, "POST", {"user":{"email": id,"password": pw}})
         if (res.data !== null) {
             res = await useAxios(PROGRAMMERS_USER_RECORD, "GET", undefined, res.headers["set-cookie"]);
-            my_data = res.data
+            my_data = res.data;
         }
     } catch (e) {
         console.error('axios error: ' + e)
         return;
     }
-    
-    if (my_data !== null) {
 
-        const str = `
-<?xml version="1.0" encoding="UTF-8"?>
+    if (my_data !== null) {
+        const str = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="550" height="180" viewBox="0 0 550 180" fill="none" xmlns="http://www.w3.org/2000/svg">
 
 <style>
@@ -78,12 +76,12 @@ async function main() {
 <text x="390" y="160" class="sub">위</text>
 
 </svg>
-`
+`;
 
-        fs.writeFileSync(__dirname + '/result.svg', str)
-        await commitFile(__dirname + '/result.svg')
+        fs.writeFileSync(__dirname + '/result.svg', str);
+        await commitFile(__dirname + '/result.svg');
 
-        console.log('✅ SVG Updated & Committed!')
+        console.log('✅ SVG Updated & Committed!');
     }
 }
 
