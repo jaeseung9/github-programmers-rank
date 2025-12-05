@@ -55,7 +55,7 @@
   <!-- 카드: 나의 랭킹 (단위 분리해서 겹치지 않게) -->
   <rect class="card" x="296" y="104" width="240" height="70" />
   <text class="title" x="316" y="128">나의 랭킹</text>
-  <text class="value" x="316" y="160">49,890<tspan class="unit" dx="10">위</tspan></text>
+  <text class="value" x="316" y="160">49,917<tspan class="unit" dx="10">위</tspan></text>
 
   <!-- 하단 진행바 -->
   <g transform="translate(24,184)">
