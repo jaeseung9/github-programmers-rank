@@ -45,22 +45,22 @@
   <!-- 카드: 현재 점수 -->
   <rect class="card" x="296" y="24" width="240" height="70" />
   <text class="title" x="316" y="48">현재 점수</text>
-  <text class="value" x="316" y="80">1,341</text>
+  <text class="value" x="316" y="80">1,342</text>
 
   <!-- 카드: 해결 문제 -->
   <rect class="card" x="24" y="104" width="240" height="70" />
   <text class="title" x="44" y="128">해결한 코딩 테스트</text>
-  <text class="value" x="44" y="160">109<tspan class="unit" dx="8">문제</tspan></text>
+  <text class="value" x="44" y="160">110<tspan class="unit" dx="8">문제</tspan></text>
 
   <!-- 카드: 나의 랭킹 (단위 분리해서 겹치지 않게) -->
   <rect class="card" x="296" y="104" width="240" height="70" />
   <text class="title" x="316" y="128">나의 랭킹</text>
-  <text class="value" x="316" y="160">48,853<tspan class="unit" dx="10">위</tspan></text>
+  <text class="value" x="316" y="160">48,591<tspan class="unit" dx="10">위</tspan></text>
 
   <!-- 하단 진행바 -->
   <g transform="translate(24,184)">
     <rect x="0" y="-5" width="512" height="6" rx="3" fill="rgba(255,255,255,0.18)"/>
-    <rect x="0" y="-5" width="174" height="6" rx="3" fill="#64A8FF"/>
-    <text class="muted" x="512" y="-8" text-anchor="end">109 / 300</text>
+    <rect x="0" y="-5" width="176" height="6" rx="3" fill="#64A8FF"/>
+    <text class="muted" x="512" y="-8" text-anchor="end">110 / 300</text>
   </g>
 </svg>
